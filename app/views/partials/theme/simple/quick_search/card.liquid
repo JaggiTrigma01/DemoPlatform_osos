@@ -1,0 +1,45 @@
+{% liquid
+  function url = "link_to", object: model
+
+  if model.type == 'item'
+    assign model_name = model.item_detail.name
+  elsif model.type == 'post'
+    assign model_name = model.name | default: model.title
+  else
+    assign model_name = model.name
+  endif
+%}
+
+<div class="px-0 pt-0 overflow-hidden card">
+  <a class="relative block h-64 overflow-hidden shadow-sm" href="{{ url }}">
+    {% if model.photo.photo.versions.m.size > 0 %}
+      <picture>
+        <source type="image/avif" srcset="{{ model.photo.photo.versions.m_avif }}, {{ model.photo.photo.versions.lg_avif }} 2x">
+        <img src="{{ model.photo.photo.versions.m }}" srcset=" {{ model.photo.photo.versions.lg }} 2x" width="{{ model.photo.photo_width }}" height="{{ model.photo.photo_height }}" alt="{{ object.name | default: object.id | truncate: 120 }}">
+      </picture>
+    {% else %}
+      {% render 'theme/simple/ui/picture-placeholder' %}
+    {% endif %}
+  </a>
+
+  <div class="md:p-4">
+    <header class="text-xs">
+      {% print model.type | t: scope: 'app.quick_search.type' %}
+
+    <div class="float-right">
+      {% if current_profile and model.type == 'profile' and current_profile.id != model.id %}
+        {% render 'theme/simple/follow_button', current_profile: current_profile, profile: model %}
+      {% endif %}
+    </div>
+    </header>
+
+    <div class="mt-4">
+      {% if url %}
+        <h2 class="text-lg font-medium">
+          <a href="{{ url }}">{{ model_name }}</a>
+        </h2>
+      {% endif %}
+    </div>
+
+  </div>
+</div>

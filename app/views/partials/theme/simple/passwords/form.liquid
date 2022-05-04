@@ -1,0 +1,23 @@
+<section class="container">
+
+  <form action="/passwords" method="post" class="card-lg w-full md:w-96 mx-auto">
+    {% include 'authenticity_token' %}
+
+    <fieldset>
+      <label for="password">{{ 'app.passwords.password' | t }}</label>
+      <input name="password[password]" type="password" id="password" class="w-full form-input" autocomplete="new-password"/>
+      {% include 'theme/simple/field_error', errors: object.errors.password %}
+    </fieldset>
+
+    <fieldset class="mt-3">
+      <label for="password_confirmation">{{ 'app.passwords.password_confirmation' | t }}</label >
+      <input name="password[password_confirmation]" type="password" id="password_confirmation" class="w-full form-input" autocomplete="off" />
+      {% include 'theme/simple/field_error', errors: object.errors.password_confirmation %}
+    </fieldset>
+
+    <fieldset class="mt-5">
+      <button class="button mt-3">{{ 'app.passwords.password_update' | t }}</button>
+    </fieldset>
+  </form>
+
+</section>

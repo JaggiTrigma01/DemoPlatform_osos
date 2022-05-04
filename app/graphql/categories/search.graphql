@@ -1,0 +1,38 @@
+query search($id: ID, $limit: Int = 20, $page: Int = 1, $key: String, $uuid: String, $withAllLangs: Boolean = false) {
+
+  categories: records(
+    per_page: $limit
+    page: $page
+    filter: {
+      id: { value: $id }
+      table: { value: "category" }
+      properties: [{ name: "key", value: $key }, { name: "uuid", value: $uuid }]
+    }
+    sort: [{ properties: { name: "key", order: ASC } }]
+  ) {
+    total_entries
+    total_pages
+    has_previous_page
+    has_next_page
+    results {
+      id
+      created_at
+      type: table
+
+      key: property(name: "key")
+      uuid: property(name: "uuid")
+
+      category_details: related_records(
+        table: "category_detail"
+        join_on_property: "id"
+        foreign_property: "category_id"
+        sort: { properties: { name: "lang", order: ASC } }
+      ) @include(if: $withAllLangs) {
+        id
+        type: table
+        name: property(name: "name")
+        lang: property(name: "lang")
+      }
+    }
+  }
+}

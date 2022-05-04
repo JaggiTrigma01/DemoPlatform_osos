@@ -1,0 +1,22 @@
+{% assign tokenized_names = '[]' | parse_json |
+  add_to_array: object.first_name |
+  add_to_array: object.last_name |
+  compact |
+  uniq |
+  join: ' ' |
+  downcase
+%}
+
+{% parse_json object %}
+  {
+    "uuid":         {{ '' | uuid | json }},
+    "user_id":      {{ object.user_id | default: object.id | json }},
+    "first_name":   {{ object.first_name | json }},
+    "last_name":    {{ object.last_name | json }},
+    "c__names":     {{ tokenized_names | json }}
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

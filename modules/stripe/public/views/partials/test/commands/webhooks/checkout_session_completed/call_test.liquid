@@ -1,0 +1,19 @@
+{% parse_json params %}
+{
+  "data": {
+    "object": {
+      "client_reference_id": "1234"
+    }
+  }
+}
+{% endparse_json %}
+
+{% liquid
+  assign user = '{ "id": "321" }' | parse_json
+  function object = 'modules/stripe/lib/webhooks/checkout_session_completed/call', post_params: params, current_user: user
+
+  unless object.valid
+    echo object
+    include 'test/register_error', contract: contract, field_name: 'base', key: 'test.should.be_valid'
+  endunless
+%}

@@ -1,0 +1,14 @@
+{% liquid
+  assign object = '{ "client_reference_id": "12345" }' | parse_json
+  assign user = '{ "id": "321" }' | parse_json
+
+  function object = 'modules/stripe/lib/checkout_session/create/call', object: object, current_user: user
+
+  if object.valid != true
+    include 'test/register_error', contract: contract, field_name: 'base', key: 'test.should.be_valid'
+  endif
+
+  if object.status != 'completed'
+    include 'test/register_error', contract: contract, field_name: 'gateway_id', key: 'test.should.not.match'
+  endif
+%}

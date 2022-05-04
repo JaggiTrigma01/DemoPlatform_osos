@@ -1,0 +1,17 @@
+<article class="flex flex-col">
+  <div class="bg-panel rounded shadow">
+    <a class="block w-full h-64 overflow-hidden rounded-tl rounded-tr" href="{% render 'link_to', category: object.key %}">
+      {% render 'theme/simple/ui/picture-placeholder' %}
+    </a>
+
+    <div class="p-4">
+      <h2 class="text-lg font-medium">
+        <a href="{% render 'link_to', category: object.key %}">{{ object.key | t: scope: 'categories' }}</a>
+      </h2>
+
+      <p class="mt-2 break-all">
+        {{ object.key | capitalize }}
+      </p>
+    </div>
+  </div>
+</article>

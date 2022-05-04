@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% liquid
+  function direction = 'text_direction', lang: context.language
+  function theme_settings = 'lib/queries/theme_settings/load'
+  if context.current_user
+    response_headers '{ "Cache-Control": "no-store", "Pragma": "no-cache" }'
+  endif
+%}
+<html dir="{{direction}}" lang="{{context.language}}" class="overflow-y-scroll scroll-smooth">
+  <head>
+    {% capture meta %}{% yield 'metatags' %}{% endcapture %}
+    {% render 'theme/simple/layout/head', meta: meta, context: context %}
+    {% yield 'custom_styles' %}
+    {%- capture canonical_url -%}{%- yield 'canonical' -%}{%- endcapture -%}
+    {% if canonical_url != blank %}
+      <link rel="canonical" href="https://{{ context.location.host }}{% print canonical_url | strip %}" />
+    {% endif %}
+    {% render 'theme/simple/layout/js_global_variables', current_profile: context.exports.current_profile %}
+    {% render 'theme/simple/theme_variables', theme_settings: theme_settings %}
+  </head>
+
+  <body class="font-sans antialiased leading-normal text-content bg-page scroll-smooth">
+    {% include 'theme/simple/layout/main', current_profile: context.exports.current_profile, context: context %}
+    {% yield 'custom_scripts' %}
+  </body>
+</html>

@@ -1,0 +1,35 @@
+<section class="container">
+
+  <header class="card mt-8 mb-6 relative text-center">
+    {% render 'theme/simple/profile/card', user: user, current_profile: current_profile %}
+  </header>
+
+  <div class="flex flex-col md:flex-row gap-6">
+
+    {% liquid
+      assign sections_path = 'profile/' | append: user.slug | append: '/'
+    %}
+
+    {% render 'theme/simple/profile/nav', tab: section, user: user, path: sections_path, tags: tags, current_profile: current_profile %}
+
+    <section class="flex-1">
+      {% liquid
+        if section == 'feed'
+          render 'theme/simple/profile/sections/activity', list: list, current_profile: current_profile, context: context
+        elsif section == 'groups'
+          render 'theme/simple/profile/sections/groups', list: list, current_profile: current_profile, context: context
+        elsif section == 'projects'
+          render 'theme/simple/profile/sections/projects', list: list, current_profile: current_profile, context: context
+        elsif section == 'following'
+          render 'theme/simple/profile/sections/following', list: list, current_profile: current_profile, context: context
+        elsif section == 'followers'
+          render 'theme/simple/profile/sections/followers', list: list, current_profile: current_profile, context: context
+        elsif section == 'products'
+          render 'theme/simple/profile/sections/products', list: list, current_profile: current_profile, context: context
+        endif
+      %}
+    </section>
+
+  </div>
+
+</section>
